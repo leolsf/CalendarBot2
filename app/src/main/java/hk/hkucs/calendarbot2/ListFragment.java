@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-public class CalendarFragment extends Fragment {
+public class ListFragment extends Fragment {
     private static final String ARG_COUNT = "param1";
     private Integer counter;
     private int[] COLOR_MAP = {
@@ -23,11 +23,11 @@ public class CalendarFragment extends Fragment {
             R.color.green_500, R.color.green_700
     };
 
-    public CalendarFragment() {
+    public ListFragment() {
         // Required empty public constructor
     }
-    public static CalendarFragment newInstance(Integer counter) {
-        CalendarFragment fragment = new CalendarFragment();
+    public static ListFragment newInstance(Integer counter) {
+        ListFragment fragment = new ListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COUNT, counter);
         fragment.setArguments(args);
@@ -44,7 +44,7 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calendar, container, false);
+        return inflater.inflate(R.layout.fragment_list, container, false);
     }
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -59,13 +59,6 @@ public class CalendarFragment extends Fragment {
 //            textViewCounter.setText("Chat");
 //        }
 
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Intent intent = new Intent(getActivity(), ListFragment.class);
-                startActivity(intent);
-            }
-        });
 
     }
 }
