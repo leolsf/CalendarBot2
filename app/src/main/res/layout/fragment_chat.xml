@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="#FFFFFF"
         android:gravity="center"
         android:textColor="#fff"
         android:textSize="20sp"
