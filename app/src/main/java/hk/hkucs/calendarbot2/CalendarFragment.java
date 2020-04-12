@@ -12,7 +12,11 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CalendarFragment extends Fragment {
     private static final String ARG_COUNT = "param1";
@@ -49,6 +53,16 @@ public class CalendarFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //view.setBackgroundColor(ContextCompat.getColor(getContext(), COLOR_MAP[counter]));
         MaterialCalendarView calendarView = view.findViewById(R.id.simpleCalendarView);
+
+        CalendarDay date1 = CalendarDay.from(2020,3,1);
+        CalendarDay date2 = CalendarDay.from(2020,3,2);
+        CalendarDay date3 = CalendarDay.from(2020,3,3);
+        CalendarDay date4 = CalendarDay.from(2020,3,4);
+
+        ArrayList<CalendarDay> dates = new ArrayList<CalendarDay>(Arrays.asList(date1, date2, date3, date4));
+
+        EventDecorator eventDecorator = new EventDecorator(COLOR_MAP[0],dates);
+        calendarView.addDecorator(eventDecorator);
 //        TextView textViewCounter = view.findViewById(R.id.calendar_counter);
 //        textViewCounter.setText("Calendar");
 //        if(counter == 0){
