@@ -14,9 +14,11 @@ import androidx.fragment.app.Fragment;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 public class CalendarFragment extends Fragment {
     private static final String ARG_COUNT = "param1";
@@ -63,6 +65,13 @@ public class CalendarFragment extends Fragment {
 
         EventDecorator eventDecorator = new EventDecorator(COLOR_MAP[0],dates);
         calendarView.addDecorator(eventDecorator);
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                PopUpClass popUpClass = new PopUpClass();
+                popUpClass.showPopupWindow(widget);
+            }
+        });
 //        TextView textViewCounter = view.findViewById(R.id.calendar_counter);
 //        textViewCounter.setText("Calendar");
 //        if(counter == 0){
