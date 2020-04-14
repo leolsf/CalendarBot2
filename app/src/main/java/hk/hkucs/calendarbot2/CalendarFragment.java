@@ -1,21 +1,12 @@
 package hk.hkucs.calendarbot2;
 
-// <<<<<<< master
 import android.content.Context;
-// =======
-// import android.content.Intent;
-// >>>>>>> master
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-// <<<<<<< master
 import android.widget.ArrayAdapter;
-// =======
-// import android.widget.Button;
-// >>>>>>> master
 import android.widget.CalendarView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,7 +31,6 @@ public class CalendarFragment extends Fragment {
             R.color.blue_300, R.color.blue_500, R.color.blue_700, R.color.green_100, R.color.green_300,
             R.color.green_500, R.color.green_700
     };
-
     public CalendarFragment() {
         // Required empty public constructor
     }
@@ -98,15 +88,6 @@ public class CalendarFragment extends Fragment {
 //        else{
 //            textViewCounter.setText("Chat");
 //        }
-
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Intent intent = new Intent(getActivity(), ListDataActivity.class);
-                startActivity(intent);
-
-            }
-        });
 
     }
 }
