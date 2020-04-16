@@ -21,6 +21,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL1 = "ID";
     private static final String COL2 = "task";
 
+//    private static final String TABLE_NAME2 = "task_table2";
+//    private static final String YEAR = "year";
+//    private static final String MONTH = "year";
+//    private static final String DAY = "year";
+//    private static final String HOUR = "year";
+//    private static final String MINUTE = "year";
+//    private static final String SECOND = "year";
+//    private static final String LOCATION = "year";
+//    private static final String INFO = "year";
+
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, TABLE_NAME, null, 1);

@@ -3,6 +3,8 @@ package hk.hkucs.calendarbot2;
 import android.text.format.Time;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import org.bson.Document;
+
 
 import java.util.Date;
 
@@ -39,5 +41,15 @@ public class TaskClass {
     }
     public void setInfo(String i){
         info = i;
+    }
+
+    public Document objectToDoc(){
+        Document doc = new Document();
+        doc.put("DATE", date);
+        doc.put("TIME", time);
+        doc.put("LOCATION", location);
+        doc.put("CONTENT", info);
+
+        return doc;
     }
 }
