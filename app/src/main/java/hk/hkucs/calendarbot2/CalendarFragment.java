@@ -1,12 +1,15 @@
 package hk.hkucs.calendarbot2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -78,8 +81,11 @@ public class CalendarFragment extends Fragment {
                 PopUpClass popUpClass = new PopUpClass();
                 String[] taskArray = {"Lecture","Appointment","Presentation","Seminar"};
                 popUpClass.showPopupWindow(widget, c, taskArray);
+
             }
         });
+
+
 //        TextView textViewCounter = view.findViewById(R.id.calendar_counter);
 //        textViewCounter.setText("Calendar");
 //        if(counter == 0){
@@ -88,6 +94,7 @@ public class CalendarFragment extends Fragment {
 //        else{
 //            textViewCounter.setText("Chat");
 //        }
+
 
     }
 }
