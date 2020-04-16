@@ -43,13 +43,22 @@ public class TaskClass {
         info = i;
     }
 
-    public Document objectToDoc(){
-        Document doc = new Document();
-        doc.put("DATE", date);
-        doc.put("TIME", time);
-        doc.put("LOCATION", location);
-        doc.put("CONTENT", info);
-
-        return doc;
+    public int[] getDate(){
+        int[] date_array = {date.getYear(),  date.getMonth(), date.getDay()};
+        return date_array;
     }
+
+    public int[] getTime(){
+        int[] time_array = {time.getHours(), time.getMinutes(), time.getSeconds()};
+        return time_array;
+    }
+
+    public String getLocation(){
+        return location;
+    }
+
+    public String getInfo(){
+        return info;
+    }
+
 }

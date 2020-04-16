@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+
 import static hk.hkucs.calendarbot2.R.layout.pop_up_layout;
 
 public class PopUpClass extends Fragment {
@@ -24,7 +26,7 @@ public class PopUpClass extends Fragment {
     private static final String TAG = "PopUpClass";
 
 
-    public void showPopupWindow(final View view, Context c, final String[] taskArray){
+    public void showPopupWindow(final View view, Context c, final ArrayList<String> taskArray){
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         final View popupView = inflater.inflate(pop_up_layout,null);
         int width = LinearLayout.LayoutParams.MATCH_PARENT;

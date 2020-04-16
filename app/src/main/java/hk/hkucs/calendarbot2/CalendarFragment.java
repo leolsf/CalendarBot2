@@ -25,10 +25,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
+
+
 public class CalendarFragment extends Fragment {
     private static final String ARG_COUNT = "param1";
     private Integer counter;
     static private Context c;
+    private DatabaseHelper databaseHelper;
     private int[] COLOR_MAP = {
             R.color.red_100, R.color.red_300, R.color.red_500, R.color.red_700, R.color.blue_100,
             R.color.blue_300, R.color.blue_500, R.color.blue_700, R.color.green_100, R.color.green_300,
@@ -67,7 +70,15 @@ public class CalendarFragment extends Fragment {
         CalendarDay date2 = CalendarDay.from(2020,3,2);
         CalendarDay date3 = CalendarDay.from(2020,3,3);
         CalendarDay date4 = CalendarDay.from(2020,3,4);
+//
+//        TaskClass taskClass = new TaskClass();
+//        taskClass.setDate(date1);
+//        taskClass.setTime(13,30,0);
+//        taskClass.setLocation("LTA");
+//        taskClass.setInfo("lecture");
 
+        databaseHelper = new DatabaseHelper(getActivity());
+        //databaseHelper.addTask(taskClass);
 
 
 
@@ -79,7 +90,13 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 PopUpClass popUpClass = new PopUpClass();
-                String[] taskArray = {"Lecture","Appointment","Presentation","Seminar"};
+                ArrayList<String> taskArray = new ArrayList<>();
+                ArrayList<String> taskArray2 = new ArrayList<>();
+                taskArray2.add("seminar");
+                ArrayList<TaskClass> task_list = databaseHelper.getTasksByDate(date);
+                for(int i = 0; i<task_list.size(); i++){
+                    taskArray.add(task_list.get(i).getInfo());
+                }
                 popUpClass.showPopupWindow(widget, c, taskArray);
 
             }
