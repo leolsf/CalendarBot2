@@ -13,6 +13,12 @@ public class TaskClass {
     private Date time;
     private String location;
     private String info;
+    public void TaskClass(){
+        date = CalendarDay.from(1970,1,1);
+        time = new Date();
+        location = "";
+        info = "";
+    }
     public void TaskClass(CalendarDay d, Date t, String l, String i){
         date = d;
         time = t;

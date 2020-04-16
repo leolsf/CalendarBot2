@@ -23,7 +23,7 @@ public class ChatFragment extends Fragment {
             R.color.green_500, R.color.green_700
     };
 
-    DatabaseHelper mDatabaseHelper;
+//    DatabaseHelper mDatabaseHelper;
     private Button button_Add;
     private EditText editText_Input;
 
@@ -55,7 +55,7 @@ public class ChatFragment extends Fragment {
 
         editText_Input = (EditText) view.findViewById(R.id.editText_Input);
         button_Add = (Button) view.findViewById(R.id.button_Add);
-        mDatabaseHelper = new DatabaseHelper(getActivity());
+        //mDatabaseHelper = new DatabaseHelper(getActivity());
 
         return view;
     }
@@ -87,12 +87,12 @@ public class ChatFragment extends Fragment {
     }
 
     public void AddData(String newEntry) {
-        boolean insertData = mDatabaseHelper.addData(newEntry);
-        if (insertData) {
-            toastMessage("Data inserted successfully :)");
-        } else {
-            toastMessage("Something went wrong :(");
-        }
+//        boolean insertData = mDatabaseHelper.addData(newEntry);
+//        if (insertData) {
+//            toastMessage("Data inserted successfully :)");
+//        } else {
+//            toastMessage("Something went wrong :(");
+//        }
     }
 
     /**

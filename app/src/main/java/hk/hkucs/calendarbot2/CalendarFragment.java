@@ -21,6 +21,8 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import org.bson.Document;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -29,6 +31,7 @@ public class CalendarFragment extends Fragment {
     private static final String ARG_COUNT = "param1";
     private Integer counter;
     static private Context c;
+    private MongoDBAdaptor mongoDBAdaptor;
     private int[] COLOR_MAP = {
             R.color.red_100, R.color.red_300, R.color.red_500, R.color.red_700, R.color.blue_100,
             R.color.blue_300, R.color.blue_500, R.color.blue_700, R.color.green_100, R.color.green_300,
@@ -64,14 +67,19 @@ public class CalendarFragment extends Fragment {
         MaterialCalendarView calendarView = view.findViewById(R.id.simpleCalendarView);
 
         CalendarDay date1 = CalendarDay.from(2020,3,1);
-        CalendarDay date2 = CalendarDay.from(2020,3,2);
-        CalendarDay date3 = CalendarDay.from(2020,3,3);
-        CalendarDay date4 = CalendarDay.from(2020,3,4);
+        TaskClass task = new TaskClass();
+        task.setDate(date1);
+        task.setTime(3,30,0);
+        task.setLocation("LTA");
+        task.setInfo("Lecture");
+        mongoDBAdaptor = new MongoDBAdaptor("db");
+        Document d = task.objectToDoc();
+        //mongoDBAdaptor.insertOneDocument("task",d);
 
 
 
 
-        ArrayList<CalendarDay> dates = new ArrayList<CalendarDay>(Arrays.asList(date1, date2, date3, date4));
+        ArrayList<CalendarDay> dates = new ArrayList<CalendarDay>(Arrays.asList(date1));
 
         EventDecorator eventDecorator = new EventDecorator(COLOR_MAP[0],dates);
         calendarView.addDecorator(eventDecorator);

@@ -26,11 +26,9 @@ public class MongoDBAdaptor {
 
     public MongoDBAdaptor(String name){
         this.DBName = name;
-        this.client = Stitch.initializeDefaultAppClient("CalendarBot");
+        this.client = Stitch.initializeDefaultAppClient("CalendarBot2");
         this.mobileClient = client.getServiceClient(LocalMongoDbService.clientFactory);
 
-        this.localDB = mobileClient.getDatabase(this.DBName);
-        this.localDB.drop();
         this.localDB = mobileClient.getDatabase(this.DBName);
     }
 
