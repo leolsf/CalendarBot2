@@ -2,6 +2,8 @@ package hk.hkucs.calendarbot2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.Gravity;
@@ -30,11 +32,14 @@ public class PopUpClass extends Fragment {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         final View popupView = inflater.inflate(pop_up_layout,null);
         int width = LinearLayout.LayoutParams.MATCH_PARENT;
-        int height = LinearLayout.LayoutParams.MATCH_PARENT;
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        final PopupWindow popupWindow = new PopupWindow(popupView,width,height,true);
+
+        popupWindow.setOutsideTouchable(true);
+
         popupWindow.showAtLocation(view, Gravity.CENTER,0,0);
-//        popupWindow.setOutsideTouchable(true);
-//        popupView.setBackground(new ColorDrawable(0x00000000));
+
+
         ArrayAdapter adapter = new ArrayAdapter<String>(c, R.layout.activity_listview, taskArray);
         final ListView listView = (ListView) popupView.findViewById(R.id.listView);
         listView.setAdapter(adapter);
