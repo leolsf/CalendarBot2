@@ -93,13 +93,14 @@ public class CalendarFragment extends Fragment {
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 PopUpClass popUpClass = new PopUpClass();
                 ArrayList<String> taskArray = new ArrayList<>();
-                ArrayList<String> taskArray2 = new ArrayList<>();
-                taskArray2.add("seminar");
                 ArrayList<TaskClass> task_list = databaseHelper.getTasksByDate(date);
                 for(int i = 0; i<task_list.size(); i++){
                     taskArray.add(task_list.get(i).getInfo());
                 }
-                popUpClass.showPopupWindow(widget, c, taskArray);
+                if(taskArray.size()!=0){
+                    popUpClass.showPopupWindow(widget, c, taskArray);
+                }
+
 
             }
         });
