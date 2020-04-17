@@ -2,6 +2,7 @@ package hk.hkucs.calendarbot2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +24,6 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-
 
 
 public class CalendarFragment extends Fragment {
@@ -66,10 +65,12 @@ public class CalendarFragment extends Fragment {
         //view.setBackgroundColor(ContextCompat.getColor(getContext(), COLOR_MAP[counter]));
         MaterialCalendarView calendarView = view.findViewById(R.id.simpleCalendarView);
 
-        CalendarDay date1 = CalendarDay.from(2020,3,1);
-        CalendarDay date2 = CalendarDay.from(2020,3,2);
-        CalendarDay date3 = CalendarDay.from(2020,3,3);
-        CalendarDay date4 = CalendarDay.from(2020,3,4);
+//        CalendarDay date1 = CalendarDay.from(2020,3,1);
+//        CalendarDay date2 = CalendarDay.from(2020,3,2);
+//        CalendarDay date3 = CalendarDay.from(2020,3,3);
+//        CalendarDay date4 = CalendarDay.from(2020,3,4);
+
+
 //
 //        TaskClass taskClass = new TaskClass();
 //        taskClass.setDate(date1);
@@ -82,7 +83,8 @@ public class CalendarFragment extends Fragment {
 
 
 
-        ArrayList<CalendarDay> dates = new ArrayList<CalendarDay>(Arrays.asList(date1, date2, date3, date4));
+        //ArrayList<CalendarDay> dates = new ArrayList<CalendarDay>(Arrays.asList(date1, date2, date3, date4));
+        ArrayList<CalendarDay> dates = databaseHelper.getAllDates();
 
         EventDecorator eventDecorator = new EventDecorator(COLOR_MAP[0],dates);
         calendarView.addDecorator(eventDecorator);

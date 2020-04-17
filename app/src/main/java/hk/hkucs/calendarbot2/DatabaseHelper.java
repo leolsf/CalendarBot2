@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 import static android.content.ContentValues.TAG;
 
@@ -190,6 +191,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " WHERE " + COL2 + " = '" + task + "'";
         Cursor data = db.rawQuery(query, null);
         return data;
+    }
+
+    public ArrayList<CalendarDay> getAllDates(){
+        ArrayList<CalendarDay> date_list = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + YEAR + ", "+ MONTH + ", "+ DAY + " FROM " + TABLE_NAME2;
+        Cursor cursor = db.rawQuery(query,null);
+        while(cursor.moveToNext()){
+            int index;
+            index = cursor.getColumnIndexOrThrow("year");
+            int year = cursor.getInt(index);
+
+            index = cursor.getColumnIndexOrThrow("month");
+            int month = cursor.getInt(index);
+
+            index = cursor.getColumnIndexOrThrow("day");
+            int day = cursor.getInt(index);
+
+            CalendarDay date = CalendarDay.from(year,month,day);
+            date_list.add(date);
+        }
+        LinkedHashSet<CalendarDay> hashSet = new LinkedHashSet<>(date_list);
+
+        ArrayList<CalendarDay> date_list_no_duplicate = new ArrayList<>(hashSet);
+        return date_list_no_duplicate;
     }
 
     /**
