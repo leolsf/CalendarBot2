@@ -50,22 +50,21 @@ public class EditDataActivity extends AppCompatActivity {
         // set the text to show the current selected task name
         editText_Task.setText(taskClass.getInfo());
 //
-//        button_Save.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String item = editText_Task.getText().toString();
-//                if(!item.equals("")) {
-//                    mDatabaseHelper.updateTask(item, selectedID, selectedTask);
-//                    Intent intent = new Intent(EditDataActivity.this, ListDataActivity.class);
-//                    startActivity(intent);
-//                    finish();
-////                    EditDataActivity.this.onBackPressed();
-//                } else {
-//                    toastMessage("You must enter a task :) ");
-//                }
-//
-//            }
-//        });
+        button_Save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String item = editText_Task.getText().toString();
+                if(!item.equals("")) {
+                    mDatabaseHelper.deleteTask(taskClass);
+                    taskClass.setInfo(item);
+                    mDatabaseHelper.addTask(taskClass);
+                    ((Activity)EditDataActivity.this).finish();
+                } else {
+                    toastMessage("You must enter a task :) ");
+                }
+
+            }
+        });
 //
         button_Delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,10 +73,7 @@ public class EditDataActivity extends AppCompatActivity {
                 editText_Task.setText("");
                 toastMessage("removed from database");
                 ((Activity)EditDataActivity.this).finish();
-//                Intent intent = new Intent(EditDataActivity.this, MainActivity.this);
-//                startActivity(intent);
 
-//                EditDataActivity.this.onBackPressed();
             }
         });
 
