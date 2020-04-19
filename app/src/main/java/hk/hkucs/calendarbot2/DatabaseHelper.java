@@ -85,6 +85,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean addTask(TaskClass taskClass) {
         SQLiteDatabase db = this.getWritableDatabase();
+        deleteTask(taskClass);
         ContentValues contentValues = new ContentValues();
         contentValues.put(YEAR, taskClass.getDate()[0]);
         contentValues.put(MONTH, taskClass.getDate()[1]);
@@ -294,5 +295,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + LOCATION + " = '" + task.getLocation() + "'" + " AND "
                 + INFO + " = '" + task.getInfo() + "'";
         db.execSQL(query);
+
     }
 }
