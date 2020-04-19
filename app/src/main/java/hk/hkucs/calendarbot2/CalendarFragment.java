@@ -4,12 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -24,6 +28,8 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 
 public class CalendarFragment extends Fragment {
@@ -65,6 +71,8 @@ public class CalendarFragment extends Fragment {
         //view.setBackgroundColor(ContextCompat.getColor(getContext(), COLOR_MAP[counter]));
         MaterialCalendarView calendarView = view.findViewById(R.id.simpleCalendarView);
 
+
+
 //        CalendarDay date1 = CalendarDay.from(2020,3,1);
 //        CalendarDay date2 = CalendarDay.from(2020,3,2);
 //        CalendarDay date3 = CalendarDay.from(2020,3,3);
@@ -91,29 +99,39 @@ public class CalendarFragment extends Fragment {
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                PopUpClass popUpClass = new PopUpClass();
+
                 ArrayList<String> taskArray = new ArrayList<>();
                 ArrayList<TaskClass> task_list = databaseHelper.getTasksByDate(date);
                 for(int i = 0; i<task_list.size(); i++){
                     taskArray.add(task_list.get(i).getInfo());
                 }
                 if(taskArray.size()!=0){
-                    popUpClass.showPopupWindow(widget, c, taskArray);
+                    LayoutInflater inflater = (LayoutInflater) c.getSystemService(LAYOUT_INFLATER_SERVICE);
+                    View popupView = inflater.inflate(R.layout.pop_up_layout,null);
+                    int width = LinearLayout.LayoutParams.MATCH_PARENT;
+                    int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    final PopupWindow popupWindow = new PopupWindow(popupView,width,height,true);
+                    popupWindow.setOutsideTouchable(true);
+
+                    popupWindow.showAtLocation(view, Gravity.CENTER,0,0);
+                    ArrayAdapter adapter = new ArrayAdapter<String>(c, R.layout.activity_listview, taskArray);
+                    final ListView listView = (ListView) popupView.findViewById(R.id.listView);
+                    listView.setAdapter(adapter);
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(c, EditDataActivity.class);
+                            startActivity(intent);
+                            popupWindow.dismiss();
+                        }
+                    });
                 }
 
 
             }
         });
 
-
-//        TextView textViewCounter = view.findViewById(R.id.calendar_counter);
-//        textViewCounter.setText("Calendar");
-//        if(counter == 0){
-//            textViewCounter.setText("Calendar");
-//        }
-//        else{
-//            textViewCounter.setText("Chat");
-//        }
 
 
     }
