@@ -234,6 +234,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
+    public void addSomeTestRecords(){
+        TaskClass task = new TaskClass();
+        task.setDate(2020,3,1);
+        task.setTime(14,30,0);
+        task.setLocation("LTA");
+        task.setInfo("lecture");
+
+        addTask(task);
+
+        task.setDate(2020,3,1);
+        task.setTime(15,30,0);
+        task.setLocation("LTB");
+        task.setInfo("seminar");
+
+        addTask(task);
+
+        task.setDate(2020,3,2);
+        task.setTime(14,30,0);
+        task.setLocation("LTC");
+        task.setInfo("lecture");
+
+        addTask(task);
+
+        task.setDate(2020,3,5);
+        task.setTime(10,30,0);
+        task.setLocation("LTA");
+        task.setInfo("lecture");
+
+        addTask(task);
+
+
+    }
+
     /**
      * Delete from database
      * @param id
@@ -246,6 +279,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL2 + " = '" + task + "'";
         Log.d(TAG, "deleteTask: query: " + query);
         Log.d(TAG, "deleteName: Deleting " + task + " from database.");
+        db.execSQL(query);
+    }
+
+    public void deleteTask(TaskClass task){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM " + TABLE_NAME2 + " WHERE "
+                + YEAR + " = '" + task.getDate()[0] + "'" + " AND "
+                + MONTH + " = '" + task.getDate()[1] + "'" + " AND "
+                + DAY + " = '" + task.getDate()[2] + "'" + " AND "
+                + HOUR + " = '" + task.getTime()[0] + "'" + " AND "
+                + MINUTE + " = '" + task.getTime()[1] + "'" + " AND "
+                + SECOND + " = '" + task.getTime()[2] + "'" + " AND "
+                + LOCATION + " = '" + task.getLocation() + "'" + " AND "
+                + INFO + " = '" + task.getInfo() + "'";
         db.execSQL(query);
     }
 }

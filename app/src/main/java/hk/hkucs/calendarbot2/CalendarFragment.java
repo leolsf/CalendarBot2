@@ -37,6 +37,9 @@ public class CalendarFragment extends Fragment {
     private Integer counter;
     static private Context c;
     private DatabaseHelper databaseHelper;
+    private MaterialCalendarView calendarView;
+    private EventDecorator currentDecorator;
+
     private int[] COLOR_MAP = {
             R.color.red_100, R.color.red_300, R.color.red_500, R.color.red_700, R.color.blue_100,
             R.color.blue_300, R.color.blue_500, R.color.blue_700, R.color.green_100, R.color.green_300,
@@ -60,6 +63,19 @@ public class CalendarFragment extends Fragment {
             counter = getArguments().getInt(ARG_COUNT);
         }
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(calendarView!=null){
+            calendarView.removeDecorators();
+            ArrayList<CalendarDay> dates = databaseHelper.getAllDates();
+            currentDecorator = new EventDecorator(COLOR_MAP[0],dates);
+            calendarView.addDecorator(currentDecorator);
+        }
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,39 +85,21 @@ public class CalendarFragment extends Fragment {
     @Override public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //view.setBackgroundColor(ContextCompat.getColor(getContext(), COLOR_MAP[counter]));
-        MaterialCalendarView calendarView = view.findViewById(R.id.simpleCalendarView);
-
-
-
-//        CalendarDay date1 = CalendarDay.from(2020,3,1);
-//        CalendarDay date2 = CalendarDay.from(2020,3,2);
-//        CalendarDay date3 = CalendarDay.from(2020,3,3);
-//        CalendarDay date4 = CalendarDay.from(2020,3,4);
-
-
-//
-//        TaskClass taskClass = new TaskClass();
-//        taskClass.setDate(date1);
-//        taskClass.setTime(13,30,0);
-//        taskClass.setLocation("LTA");
-//        taskClass.setInfo("lecture");
+        calendarView = view.findViewById(R.id.simpleCalendarView);
 
         databaseHelper = new DatabaseHelper(getActivity());
-        //databaseHelper.addTask(taskClass);
+        databaseHelper.addSomeTestRecords();
 
-
-
-        //ArrayList<CalendarDay> dates = new ArrayList<CalendarDay>(Arrays.asList(date1, date2, date3, date4));
         ArrayList<CalendarDay> dates = databaseHelper.getAllDates();
-
         EventDecorator eventDecorator = new EventDecorator(COLOR_MAP[0],dates);
         calendarView.addDecorator(eventDecorator);
+
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-                ArrayList<String> taskArray = new ArrayList<>();
-                ArrayList<TaskClass> task_list = databaseHelper.getTasksByDate(date);
+                final ArrayList<String> taskArray = new ArrayList<>();
+                final ArrayList<TaskClass> task_list = databaseHelper.getTasksByDate(date);
                 for(int i = 0; i<task_list.size(); i++){
                     taskArray.add(task_list.get(i).getInfo());
                 }
@@ -122,6 +120,17 @@ public class CalendarFragment extends Fragment {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Intent intent = new Intent(c, EditDataActivity.class);
+                            intent.putExtra("id",id);
+                            TaskClass task = task_list.get((int) id);
+                            intent.putExtra("task_info", task.getInfo());
+                            intent.putExtra("year", task.getDate()[0]);
+
+                            intent.putExtra("month", task.getDate()[1]);
+                            intent.putExtra("day", task.getDate()[2]);
+                            intent.putExtra("hour", task.getTime()[0]);
+                            intent.putExtra("minute", task.getTime()[1]);
+                            intent.putExtra("second", task.getTime()[2]);
+                            intent.putExtra("location", task.getLocation());
                             startActivity(intent);
                             popupWindow.dismiss();
                         }
