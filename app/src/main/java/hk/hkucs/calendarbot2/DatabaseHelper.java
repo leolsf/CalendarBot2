@@ -9,6 +9,11 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+
 import static android.content.ContentValues.TAG;
 
 /***
@@ -21,6 +26,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL1 = "ID";
     private static final String COL2 = "task";
 
+    private static final String TABLE_NAME2 = "task_table2";
+    private static final String YEAR = "year";
+    private static final String MONTH = "month";
+    private static final String DAY = "day";
+    private static final String HOUR = "hour";
+    private static final String MINUTE = "minute";
+    private static final String SECOND = "second";
+    private static final String LOCATION = "location";
+    private static final String INFO = "info";
+
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, TABLE_NAME, null, 1);
@@ -30,12 +45,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COL2 + " TEXT)";
+        String createTable2 = "CREATE TABLE " + TABLE_NAME2 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + YEAR + " INT,"
+                + MONTH + " INT,"
+                + DAY + " INT,"
+                + HOUR + " INT,"
+                + MINUTE + " INT,"
+                + SECOND + " INT,"
+                + LOCATION + " TEXT,"
+                + INFO + " TEXT"
+        +")";
         db.execSQL(createTable);
+        db.execSQL(createTable2);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME2);
         onCreate(db);
     }
 
@@ -56,6 +83,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean addTask(TaskClass taskClass) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        deleteTask(taskClass);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(YEAR, taskClass.getDate()[0]);
+        contentValues.put(MONTH, taskClass.getDate()[1]);
+        contentValues.put(DAY, taskClass.getDate()[2]);
+
+        contentValues.put(HOUR, taskClass.getTime()[0]);
+        contentValues.put(MINUTE, taskClass.getTime()[1]);
+        contentValues.put(SECOND, taskClass.getTime()[2]);
+
+        contentValues.put(LOCATION, taskClass.getLocation());
+        contentValues.put(INFO, taskClass.getInfo());
+
+        //Log.d(TAG, "addData: Adding " + item + " to " + TABLE_NAME2;
+
+        long result = db.insert(TABLE_NAME2, null, contentValues);
+
+        // if date as inserted incorrectly, it will return -1
+        if (result == -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     /**
      * Returns all the data from database
      * @return
@@ -65,6 +119,66 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_NAME;
         Cursor data = db.rawQuery(query, null);
         return data;
+    }
+
+    public Cursor getCursorByDate(CalendarDay date){
+        int year = date.getYear();
+        int month = date.getMonth();
+        int day = date.getDay();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String[] columns = {YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, LOCATION, INFO};
+
+        Cursor c = db.query(
+                TABLE_NAME2, columns,
+                YEAR  + "=" + year  + " AND " +
+                        MONTH + "=" + month + " AND " +
+                        DAY   + "=" + day,
+                null, null, null,
+                HOUR + "," + MINUTE);
+        return c;
+
+    }
+
+    public ArrayList<TaskClass> getTasksByDate(CalendarDay date){
+        Cursor cursor = getCursorByDate(date);
+        ArrayList<TaskClass> task_list = new ArrayList<>();
+        while(cursor.moveToNext()){
+            int index;
+//            index = cursor.getColumnIndexOrThrow("year");
+//            int year = cursor.getInt(index);
+//
+//            index = cursor.getColumnIndexOrThrow("month");
+//            int month = cursor.getInt(index);
+//
+//            index = cursor.getColumnIndexOrThrow("day");
+//            int day = cursor.getInt(index);
+
+            index = cursor.getColumnIndexOrThrow("hour");
+            int hour = cursor.getInt(index);
+
+            index = cursor.getColumnIndexOrThrow("minute");
+            int minute = cursor.getInt(index);
+
+            index = cursor.getColumnIndexOrThrow("second");
+            int second = cursor.getInt(index);
+
+            index = cursor.getColumnIndexOrThrow("location");
+            String location = cursor.getString(index);
+
+            index = cursor.getColumnIndexOrThrow("info");
+            String info = cursor.getString(index);
+
+            TaskClass taskClass = new TaskClass();
+            taskClass.setDate(date);
+            taskClass.setTime(hour,minute,second);
+            taskClass.setLocation(location);
+            taskClass.setInfo(info);
+            task_list.add(taskClass);
+
+        }
+        return task_list;
+
     }
 
     /**
@@ -78,6 +192,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " WHERE " + COL2 + " = '" + task + "'";
         Cursor data = db.rawQuery(query, null);
         return data;
+    }
+
+    public ArrayList<CalendarDay> getAllDates(){
+        ArrayList<CalendarDay> date_list = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + YEAR + ", "+ MONTH + ", "+ DAY + " FROM " + TABLE_NAME2;
+        Cursor cursor = db.rawQuery(query,null);
+        while(cursor.moveToNext()){
+            int index;
+            index = cursor.getColumnIndexOrThrow("year");
+            int year = cursor.getInt(index);
+
+            index = cursor.getColumnIndexOrThrow("month");
+            int month = cursor.getInt(index);
+
+            index = cursor.getColumnIndexOrThrow("day");
+            int day = cursor.getInt(index);
+
+            CalendarDay date = CalendarDay.from(year,month,day);
+            date_list.add(date);
+        }
+        LinkedHashSet<CalendarDay> hashSet = new LinkedHashSet<>(date_list);
+
+        ArrayList<CalendarDay> date_list_no_duplicate = new ArrayList<>(hashSet);
+        return date_list_no_duplicate;
     }
 
     /**
@@ -96,6 +235,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
+    public void addSomeTestRecords(){
+        TaskClass task = new TaskClass();
+        task.setDate(2020,3,1);
+        task.setTime(14,30,0);
+        task.setLocation("LTA");
+        task.setInfo("lecture");
+
+        addTask(task);
+
+        task.setDate(2020,3,1);
+        task.setTime(15,30,0);
+        task.setLocation("LTB");
+        task.setInfo("seminar");
+
+        addTask(task);
+
+        task.setDate(2020,3,2);
+        task.setTime(14,30,0);
+        task.setLocation("LTC");
+        task.setInfo("lecture");
+
+        addTask(task);
+
+        task.setDate(2020,3,5);
+        task.setTime(10,30,0);
+        task.setLocation("LTA");
+        task.setInfo("lecture");
+
+        addTask(task);
+
+
+    }
+
     /**
      * Delete from database
      * @param id
@@ -109,5 +281,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d(TAG, "deleteTask: query: " + query);
         Log.d(TAG, "deleteName: Deleting " + task + " from database.");
         db.execSQL(query);
+    }
+
+    public void deleteTask(TaskClass task){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM " + TABLE_NAME2 + " WHERE "
+                + YEAR + " = '" + task.getDate()[0] + "'" + " AND "
+                + MONTH + " = '" + task.getDate()[1] + "'" + " AND "
+                + DAY + " = '" + task.getDate()[2] + "'" + " AND "
+                + HOUR + " = '" + task.getTime()[0] + "'" + " AND "
+                + MINUTE + " = '" + task.getTime()[1] + "'" + " AND "
+                + SECOND + " = '" + task.getTime()[2] + "'" + " AND "
+                + LOCATION + " = '" + task.getLocation() + "'" + " AND "
+                + INFO + " = '" + task.getInfo() + "'";
+        db.execSQL(query);
+
     }
 }
