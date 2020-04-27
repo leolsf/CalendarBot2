@@ -13,6 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ChatFragment extends Fragment {
     private static final String ARG_COUNT = "param1";
@@ -24,9 +30,11 @@ public class ChatFragment extends Fragment {
     };
 
     DatabaseHelper mDatabaseHelper;
-    private Button button_Add;
+    private Button button_Send;
     private EditText editText_Input;
 
+    List<Msg> list  =new ArrayList<>();
+    EditText text ;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -44,17 +52,18 @@ public class ChatFragment extends Fragment {
         if (getArguments() != null) {
             counter = getArguments().getInt(ARG_COUNT);
         }
+        initData();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment`
 //        return inflater.inflate(R.layout.fragment_chat, container, false);
 
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        editText_Input = (EditText) view.findViewById(R.id.editText_Input);
-        button_Add = (Button) view.findViewById(R.id.button_Add);
+        text = (EditText) view.findViewById(R.id.et_info);
+        button_Send = (Button) view.findViewById(R.id.bt_send);
         mDatabaseHelper = new DatabaseHelper(getActivity());
 
         return view;
@@ -62,8 +71,11 @@ public class ChatFragment extends Fragment {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.setBackgroundColor(ContextCompat.getColor(getContext(), COLOR_MAP[counter]));
-        TextView textViewCounter = view.findViewById(R.id.chat_counter);
-        textViewCounter.setText("Chat");
+        final RecyclerView recyclerView = view.findViewById(R.id.rlv);
+        final ItemAdapter msgAdapter = new ItemAdapter(list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(msgAdapter);
 //        if(counter == 0){
 //            textViewCounter.setText("Calendar");
 //        }
@@ -71,16 +83,28 @@ public class ChatFragment extends Fragment {
 //            textViewCounter.setText("Chat");
 //        }
 
-        button_Add.setOnClickListener(new View.OnClickListener() {
+        button_Send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newEntry = editText_Input.getText().toString();
-                if(editText_Input.length() != 0) {
+                String newEntry = text.getText().toString();
+                if(text.length() != 0) {
                     AddData(newEntry);
-                    editText_Input.setText("");
+//                    text.setText("");
                 } else {
                     toastMessage("You must put something in the text field!");
                 }
+
+                Random random = new Random();
+                // 这里还是利用随机数来生成消息的类型
+                int count = random.nextInt(10);
+                Msg msg = new Msg(text.getText()+"count: "+count, count%2);
+                list.add(msg);
+                // 表示在消息的末尾插入内容
+                msgAdapter.notifyItemInserted(list.size()-1);
+                // 让 RecyclerView 自动滚动到最底部
+                recyclerView.scrollToPosition(list.size()-1);
+                // 清空内容
+                text.setText("");
             }
         });
 
@@ -92,6 +116,15 @@ public class ChatFragment extends Fragment {
             toastMessage("Data inserted successfully :)");
         } else {
             toastMessage("Something went wrong :(");
+        }
+    }
+
+    public void initData(){
+        Random random = new Random();
+        for (int i=0;i<40;i++){
+            int count = random.nextInt(10);
+            Msg msg = new Msg("message"+i+"count: "+count,count%2);
+            list.add(msg);
         }
     }
 

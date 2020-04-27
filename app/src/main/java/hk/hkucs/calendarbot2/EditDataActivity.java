@@ -15,10 +15,6 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
 
-/***
- * Created by Leo on 3/20/2020
- */
-
 public class EditDataActivity extends AppCompatActivity {
 
     private static final String TAG = "EditDataActivity";
