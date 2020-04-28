@@ -16,9 +16,6 @@ import java.util.LinkedHashSet;
 
 import static android.content.ContentValues.TAG;
 
-/***
- * Created by Leo on 3/29/2020
- */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 

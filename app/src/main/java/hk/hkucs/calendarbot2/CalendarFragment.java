@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -21,6 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -28,6 +32,8 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
@@ -56,12 +62,15 @@ public class CalendarFragment extends Fragment {
         c = fragmentActivity;
         return fragment;
     }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             counter = getArguments().getInt(ARG_COUNT);
         }
+
     }
 
     @Override
@@ -82,7 +91,7 @@ public class CalendarFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_calendar, container, false);
     }
-    @Override public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(@NonNull final  View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //view.setBackgroundColor(ContextCompat.getColor(getContext(), COLOR_MAP[counter]));
         calendarView = view.findViewById(R.id.simpleCalendarView);
