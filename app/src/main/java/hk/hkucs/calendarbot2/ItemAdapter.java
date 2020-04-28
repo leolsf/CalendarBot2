@@ -17,8 +17,6 @@ public class ItemAdapter extends RecyclerView.Adapter <ItemAdapter.MsgViewHolder
         this.list = list;
     }
 
-
-
     class MsgViewHolder extends RecyclerView.ViewHolder{
         LinearLayout llLeft,llRight;
         TextView tvLeft,tvRight;

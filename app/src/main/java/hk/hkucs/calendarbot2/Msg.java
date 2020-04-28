@@ -1,7 +1,7 @@
 package hk.hkucs.calendarbot2;
 
 public class Msg {
-    public static final  int TYPE_RECEIVE = 0;
+    public static final int TYPE_RECEIVE = 0;
     public static final int TYPE_SEND = 1;
     private String content;
 
