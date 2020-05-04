@@ -110,7 +110,10 @@ public class CalendarFragment extends Fragment {
                 final ArrayList<String> taskArray = new ArrayList<>();
                 final ArrayList<TaskClass> task_list = databaseHelper.getTasksByDate(date);
                 for(int i = 0; i<task_list.size(); i++){
-                    taskArray.add(task_list.get(i).getInfo());
+                    TaskClass taskClass = task_list.get(i);
+                    String t = taskClass.getTime()[0]+":"+taskClass.getTime()[1]+":"+taskClass.getTime()[2];
+                    String text = t+"   "+taskClass.getInfo();
+                    taskArray.add(text);
                 }
                 if(taskArray.size()!=0){
                     LayoutInflater inflater = (LayoutInflater) c.getSystemService(LAYOUT_INFLATER_SERVICE);
