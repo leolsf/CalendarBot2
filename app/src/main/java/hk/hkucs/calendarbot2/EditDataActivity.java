@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -21,6 +24,7 @@ public class EditDataActivity extends AppCompatActivity {
 
     private Button button_Save, button_Delete;
     private EditText editText_Task, editText_location, editText_date, editText_time;
+    private TextView label_date,label_time,label_location,label_task;
 
     DatabaseHelper mDatabaseHelper;
 
@@ -37,6 +41,10 @@ public class EditDataActivity extends AppCompatActivity {
         editText_location = (EditText)findViewById(R.id.editText_location);
         editText_date = (EditText)findViewById(R.id.editText_date);
         editText_time = (EditText)findViewById(R.id.editText_time);
+        label_date = (TextView)findViewById(R.id.label_date);
+        label_time = (TextView)findViewById(R.id.label_time);
+        label_location = (TextView)findViewById(R.id.label_location);
+        label_task = (TextView)findViewById(R.id.label_task);
         mDatabaseHelper = new DatabaseHelper(this);
 
         // get the intent extra from the ListDataActivity
