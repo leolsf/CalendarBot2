@@ -80,7 +80,9 @@ public class CalendarFragment extends Fragment {
             calendarView.removeDecorators();
             ArrayList<CalendarDay> dates = databaseHelper.getAllDates();
             currentDecorator = new EventDecorator(COLOR_MAP[0],dates);
+            TodayDecorator todayDecorator = new TodayDecorator(COLOR_MAP[1]);
             calendarView.addDecorator(currentDecorator);
+            calendarView.addDecorator(todayDecorator);
         }
 
     }
@@ -101,7 +103,9 @@ public class CalendarFragment extends Fragment {
 
         ArrayList<CalendarDay> dates = databaseHelper.getAllDates();
         EventDecorator eventDecorator = new EventDecorator(COLOR_MAP[0],dates);
+        TodayDecorator todayDecorator = new TodayDecorator(COLOR_MAP[1]);
         calendarView.addDecorator(eventDecorator);
+        calendarView.addDecorator(todayDecorator);
 
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
