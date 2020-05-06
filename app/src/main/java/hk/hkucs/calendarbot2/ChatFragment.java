@@ -103,14 +103,14 @@ public class ChatFragment extends Fragment {
                     if(content.contains("task+")) {
                         String task_info = content.substring(indexOf).replace("+", "");
                         Msg msg_task = new Msg(content, 0, 1);
-                        Msg msg1 = new Msg("Task is "+task_info+", and where?\n(eg: location+CYC Building.)", 0, 0);
+                        Msg msg1 = new Msg("OK. Task is "+task_info+", and where?\n(eg: location+CYC Building.)", 0, 0);
                         list.add(msg_task);
                         list.add(msg1);
                         task.setInfo(task_info);
                     }else if(content.contains("location+")) {
                         String location_info = content.substring(indexOf).replace("+", "");
                         Msg msg_location = new Msg(content, 0, 1);
-                        Msg msg2= new Msg("Location is "+location_info+", and when?\n(eg: date+2020,4,1)",0, 0);
+                        Msg msg2= new Msg("Location is "+location_info+", and when?\n(eg: date+2020,5,1)",0, 0);
                         list.add(msg_location);
                         list.add(msg2);
                         task.setLocation(location_info);
@@ -130,7 +130,7 @@ public class ChatFragment extends Fragment {
                         String time_info = content.substring(indexOf).replace("+", "");
                         Msg msg_time = new Msg(content, 0, 1);
                         Msg msg4 = new Msg("Time is "+time_info,0, 0);
-                        Msg msg_done1 = new Msg("Congrats, your new task is recorded.", 0, 0);
+                        Msg msg_done1 = new Msg("Congrats! your new event is recorded.", 0, 0);
                         Msg msg_done2 = new Msg("", Pic[i], 0);
                         list.add(msg_time);
                         list.add(msg4);
@@ -143,20 +143,41 @@ public class ChatFragment extends Fragment {
                         }
                         task.setTime(time_l.get(0), time_l.get(1), time_l.get(2));
                         mDatabaseHelper.addTask(task);
-                    }else {
+                    }else if(content.contains("hi")|content.contains("Hi")|content.contains("hello")|content.contains("Hello")) {
                         Msg msg_other = new Msg(content, 0, 1);
-                        Msg msg5 = new Msg("Please input with keyword+, eg: task+lecture.",0, 0);
+                        Msg msg5 = new Msg("Hi~",0, 0);
                         Msg msg6 = new Msg("", Pic[i], 0);
                         list.add(msg_other);
                         list.add(msg5);
                         list.add(msg6);
+                    }else if(content.contains("who")|content.contains("Who")|content.contains("how")|content.contains("How")) {
+                        Msg msg_other = new Msg(content, 0, 1);
+                        Msg msg5 = new Msg("I can help add your events and plans.", 0, 0);
+                        Msg msg6 = new Msg("You could enter a event with the keyword.\n(eg: task+lecture)", 0, 0);
+                        list.add(msg_other);
+                        list.add(msg5);
+                        list.add(msg6);
+                    }else if(content.contains("bye")|content.contains("Bye")|content.contains("thank")|content.contains("Thank")) {
+                        Msg msg_other = new Msg(content, 0, 1);
+                        Msg msg5 = new Msg("Glad to help you~", 0, 0);
+                        Msg msg6 = new Msg("", Pic[i], 0);
+                        list.add(msg_other);
+                        list.add(msg5);
+                        list.add(msg6);
+                    }else {
+                        Msg msg_other = new Msg(content, 0, 1);
+                        Msg msg7 = new Msg("Please use keyword+, eg: task+lecture.",0, 0);
+                        Msg msg8 = new Msg("", Pic[i], 0);
+                        list.add(msg_other);
+                        list.add(msg7);
+                        list.add(msg8);
                     }
 
                     msgAdapter.notifyItemInserted(list.size()-1);
                     recyclerView.scrollToPosition(list.size()-1);
                     text.setText("");
                 }else {
-                    toastMessage("You must enter a task :) ");
+                    toastMessage("Please enter a event :) ");
                 }
             }
         });
@@ -172,9 +193,9 @@ public class ChatFragment extends Fragment {
     public void initData(){
         Random random = new Random();
         int i = random.nextInt(6);
-        Msg msg_init1 = new Msg("Hi, I am your personl assistant.",0, 0);
-        Msg msg_init2 = new Msg("Please input your task, location, date and time with the keyword.",0, 0);
-        Msg msg_init3 = new Msg("What is your new task?\n(eg: task+lecture.)",0, 0);
+        Msg msg_init1 = new Msg("Hi~, I am your personal assistant.",0, 0);
+        Msg msg_init2 = new Msg("I can help record your events and plans.",0, 0);
+        Msg msg_init3 = new Msg("Please tell me your new event.\n(eg: task+lecture.)",0, 0);
         Msg msg_init4 = new Msg("", Pic[i],0);
         list.add(msg_init1);
         list.add(msg_init2);
