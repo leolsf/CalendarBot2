@@ -1,12 +1,14 @@
 package hk.hkucs.calendarbot2;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +19,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.Task;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
@@ -36,11 +40,10 @@ public class ChatFragment extends Fragment {
 
     DatabaseHelper mDatabaseHelper;
     private Button button_Send;
-    private EditText editText_Input;
-
     List<Msg> list = new ArrayList<>();
     EditText text;
     final TaskClass task = new TaskClass();
+    ImageView imageLeft;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -78,7 +81,7 @@ public class ChatFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         view.setBackgroundColor(ContextCompat.getColor(getContext(), COLOR_MAP[counter]));
         final RecyclerView recyclerView = view.findViewById(R.id.rlv);
-        final ItemAdapter msgAdapter = new ItemAdapter(list);
+        final ItemAdapter msgAdapter = new ItemAdapter(getActivity(), list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(msgAdapter);
@@ -92,35 +95,29 @@ public class ChatFragment extends Fragment {
         button_Send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                String newEntry = text.getText().toString();
-//                if(text.length() != 0) {
-//                    AddData(newEntry);
-////                    text.setText("");
-//                } else {
-//                    toastMessage("You must put something in the text field!");
-//                }
-
+                Random random = new Random();
+                int i = random.nextInt(17);
                 String content = text.getText().toString();
                 int indexOf = content.indexOf("+");
                 if(!"".equals(content)) {
                     if(content.contains("task+")) {
                         String task_info = content.substring(indexOf).replace("+", "");
-                        Msg msg1 = new Msg("Task is "+task_info+", and where?\n(eg: location+CYC Building.)",0);
-                        Msg msg_task = new Msg(content,1);
+                        Msg msg_task = new Msg(content, 0, 1);
+                        Msg msg1 = new Msg("Task is "+task_info+", and where?\n(eg: location+CYC Building.)", 0, 0);
                         list.add(msg_task);
                         list.add(msg1);
                         task.setInfo(task_info);
                     }else if(content.contains("location+")) {
                         String location_info = content.substring(indexOf).replace("+", "");
-                        Msg msg2= new Msg("Location is "+location_info+", and when?\n(eg: date+2020,4,1)",0);
-                        Msg msg_location = new Msg(content,1);
+                        Msg msg_location = new Msg(content, 0, 1);
+                        Msg msg2= new Msg("Location is "+location_info+", and when?\n(eg: date+2020,4,1)",0, 0);
                         list.add(msg_location);
                         list.add(msg2);
                         task.setLocation(location_info);
                     }else if(content.contains("date+")) {
                         String date_info = content.substring(indexOf).replace("+", "");
-                        Msg msg3 = new Msg("Date is "+date_info+", and what time?\n(eg: time+19:00:00)",0);
-                        Msg msg_date = new Msg(content,1);
+                        Msg msg_date = new Msg(content, 0, 1);
+                        Msg msg3 = new Msg("Date is "+date_info+", and what time?\n(eg: time+19:00:00)",0, 0);
                         list.add(msg_date);
                         list.add(msg3);
                         String[] date_list = date_info.split(",");
@@ -131,12 +128,14 @@ public class ChatFragment extends Fragment {
                         task.setDate(date_l.get(0), date_l.get(1), date_l.get(2));
                     }else if(content.contains("time+")) {
                         String time_info = content.substring(indexOf).replace("+", "");
-                        Msg msg4 = new Msg("Time is "+time_info,0);
-                        Msg msg_done = new Msg("Congrats, your new task is recorded.", 0);
-                        Msg msg_time = new Msg(content,1);
+                        Msg msg_time = new Msg(content, 0, 1);
+                        Msg msg4 = new Msg("Time is "+time_info,0, 0);
+                        Msg msg_done1 = new Msg("Congrats, your new task is recorded.", 0, 0);
+                        Msg msg_done2 = new Msg("", Pic[i], 0);
                         list.add(msg_time);
                         list.add(msg4);
-                        list.add(msg_done);
+                        list.add(msg_done1);
+                        list.add(msg_done2);
                         String[] time_list = time_info.split(":");
                         ArrayList<Integer> time_l = new ArrayList<>();
                         for (String s : time_list) {
@@ -145,10 +144,12 @@ public class ChatFragment extends Fragment {
                         task.setTime(time_l.get(0), time_l.get(1), time_l.get(2));
                         mDatabaseHelper.addTask(task);
                     }else {
-                        Msg msg5 = new Msg("Please input with keyword+, eg: task+lecture.",0);
-                        Msg msg_other = new Msg(content,1);
+                        Msg msg_other = new Msg(content, 0, 1);
+                        Msg msg5 = new Msg("Please input with keyword+, eg: task+lecture.",0, 0);
+                        Msg msg6 = new Msg("", Pic[i], 0);
                         list.add(msg_other);
                         list.add(msg5);
+                        list.add(msg6);
                     }
 
                     msgAdapter.notifyItemInserted(list.size()-1);
@@ -162,28 +163,23 @@ public class ChatFragment extends Fragment {
 
     }
 
-    public void AddData(String i) {
-//        task.setDate(d);
-//        task.setTime(t);
-//        task.setLocation(l);
-//        task.setInfo(i);
-//        mDatabaseHelper.deleteTask(task);
-
-        boolean insertData = mDatabaseHelper.addTask(task);
-        if (insertData) {
-            toastMessage("Data inserted successfully :)");
-        } else {
-            toastMessage("Something went wrong :(");
-        }
-    }
+    private final int Pic[] = {
+            R.drawable.dog2, R.drawable.dog3, R.drawable.cat1, R.drawable.cat2, R.drawable.cat3, R.drawable.cat4,
+            R.drawable.cat5, R.drawable.cat6, R.drawable.cat7, R.drawable.cat8, R.drawable.cat9, R.drawable.cat10,
+            R.drawable.cat11, R.drawable.cat12, R.drawable.cat13, R.drawable.panda1, R.drawable.panda2
+    };
 
     public void initData(){
-        Msg msg_init = new Msg("Hi, I am your personal assistant.",0);
-        Msg msg_ask = new Msg("Please input your task, location, date and time with the keyword.",0);
-        Msg msg_example = new Msg("What is your new task?\n(eg: task+lecture.)",0);
-        list.add(msg_init);
-        list.add(msg_ask);
-        list.add(msg_example);
+        Random random = new Random();
+        int i = random.nextInt(6);
+        Msg msg_init1 = new Msg("Hi, I am your personl assistant.",0, 0);
+        Msg msg_init2 = new Msg("Please input your task, location, date and time with the keyword.",0, 0);
+        Msg msg_init3 = new Msg("What is your new task?\n(eg: task+lecture.)",0, 0);
+        Msg msg_init4 = new Msg("", Pic[i],0);
+        list.add(msg_init1);
+        list.add(msg_init2);
+        list.add(msg_init4);
+        list.add(msg_init3);
     }
 
     /**
