@@ -3,6 +3,7 @@ package hk.hkucs.calendarbot2;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,13 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.Task;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +40,7 @@ import java.util.Random;
 public class ChatFragment extends Fragment {
     private static final String ARG_COUNT = "param1";
     private Integer counter;
+    private String urlAdress = "https://sentiment-analysis-api.herokuapp.com/sentiment";
     private int[] COLOR_MAP = {
             R.color.red_100, R.color.red_300, R.color.red_500, R.color.red_700, R.color.blue_100,
             R.color.blue_300, R.color.blue_500, R.color.blue_700, R.color.green_100, R.color.green_300,
@@ -167,6 +176,15 @@ public class ChatFragment extends Fragment {
                     }else {
                         Msg msg_other = new Msg(content, 0, 1);
                         Msg msg7 = new Msg("Please use keyword+, eg: task+lecture.",0, 0);
+                        int[] value = sendPost(content);
+//                        int pic_num = -1;
+//                        if(value[0]==1){
+//                            pic_num = pos_Pic[random.nextInt(pos_Pic.length)];
+//                        }
+//                        else{
+//                            pic_num = neg_Pic[random.nextInt(neg_Pic.length)];
+//                        }
+
                         Msg msg8 = new Msg("", Pic[i], 0);
                         list.add(msg_other);
                         list.add(msg7);
@@ -190,6 +208,10 @@ public class ChatFragment extends Fragment {
             R.drawable.cat11, R.drawable.cat12, R.drawable.cat13, R.drawable.panda1, R.drawable.panda2
     };
 
+    private final int pos_Pic[] = {R.drawable.cat1, R.drawable.cat2, R.drawable.cat3, R.drawable.cat4, R.drawable.cat9, R.drawable.cat12, R.drawable.cat13, R.drawable.dog3};
+
+    private final int neg_Pic[] = {R.drawable.cat5, R.drawable.cat6, R.drawable.cat7, R.drawable.cat8, R.drawable.cat10, R.drawable.cat11, R.drawable.dog2, R.drawable.panda1, R.drawable.panda2};
+
     public void initData(){
         Random random = new Random();
         int i = random.nextInt(6);
@@ -201,6 +223,69 @@ public class ChatFragment extends Fragment {
         list.add(msg_init2);
         list.add(msg_init4);
         list.add(msg_init3);
+    }
+
+    private int[] sendPost(final String msg) {
+        final int[] value = new int[1];
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(urlAdress);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                    conn.setRequestProperty("Accept","application/json");
+                    conn.setDoOutput(true);
+                    conn.setDoInput(true);
+
+                    JSONObject jsonParam = new JSONObject();
+                    jsonParam.put("text", msg);
+
+
+                    Log.i("JSON", jsonParam.toString());
+                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                    //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+                    os.writeBytes(jsonParam.toString());
+
+                    os.flush();
+                    os.close();
+                    BufferedReader in = new BufferedReader(
+                            new InputStreamReader(conn.getInputStream()));
+                    String inputLine;
+                    StringBuffer r = new StringBuffer();
+
+                    while ((inputLine = in.readLine()) != null) {
+                        r.append(inputLine);
+                    }
+                    in.close();
+
+                    String response = r.toString();
+
+                    if(response=="Positive"){
+                        value[0] = 1;
+                    }
+                    else{
+                        value[1] = 0;
+                    }
+
+
+                    Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+                    Log.i("MSG" , conn.getResponseMessage());
+                    Log.i("Response" , response);
+
+
+                    conn.disconnect();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+        return value;
+
     }
 
     /**
