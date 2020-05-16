@@ -115,7 +115,24 @@ public class CalendarFragment extends Fragment {
                 final ArrayList<TaskClass> task_list = databaseHelper.getTasksByDate(date);
                 for(int i = 0; i<task_list.size(); i++){
                     TaskClass taskClass = task_list.get(i);
-                    String t = taskClass.getTime()[0]+":"+taskClass.getTime()[1]+":"+taskClass.getTime()[2];
+                    String t = "";
+                    if(taskClass.getTime()[0]<10){
+                        t += "0"+taskClass.getTime()[0];
+                    }else{
+                        t += taskClass.getTime()[0];
+                    }
+                    t += ":";
+                    if(taskClass.getTime()[1]<10){
+                        t += "0"+taskClass.getTime()[1];
+                    }else{
+                        t += taskClass.getTime()[1];
+                    }
+                    t += ":";
+                    if(taskClass.getTime()[2]<10){
+                        t += "0"+taskClass.getTime()[2];
+                    }else{
+                        t += taskClass.getTime()[2];
+                    }
                     String text = t+"   "+taskClass.getInfo();
                     taskArray.add(text);
                 }

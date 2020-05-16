@@ -15,14 +15,15 @@
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/label_date"
-                android:text="Date"
+                android:text="Date: "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20dp"
                  />
 
             <EditText
                 android:id="@+id/editText_date"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                  />
         </LinearLayout>
@@ -32,14 +33,15 @@
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/label_time"
-                android:text="Time"
+                android:text="Time: "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20dp"
                 />
 
             <EditText
                 android:id="@+id/editText_time"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
         </LinearLayout>
@@ -49,14 +51,15 @@
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/label_location"
-                android:text="Location"
+                android:text="Location: "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20dp"
                 />
 
             <EditText
                 android:id="@+id/editText_location"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
         </LinearLayout>
@@ -66,14 +69,15 @@
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/label_task"
-                android:text="Task"
+                android:text="Task: "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20dp"
                 />
 
             <EditText
                 android:id="@+id/editText_Task"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
         </LinearLayout>

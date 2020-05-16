@@ -59,8 +59,37 @@ public class EditDataActivity extends AppCompatActivity {
         // set the text to show the current selected task name
         editText_Task.setText(taskClass.getInfo());
         editText_location.setText(taskClass.getLocation());
-        editText_date.setText(taskClass.getDate()[0]+","+taskClass.getDate()[1]+","+taskClass.getDate()[2]);
-        editText_time.setText(taskClass.getTime()[0]+":"+taskClass.getTime()[1]+":"+taskClass.getTime()[2]);
+        String d = "";
+        d += taskClass.getDate()[0];
+        d += ",";
+        if(taskClass.getDate()[1]<10){
+            d += "0"+taskClass.getDate()[1];
+        }
+        d += ",";
+        if(taskClass.getDate()[2]<10){
+            d += "0"+taskClass.getDate()[2];
+        }
+        editText_date.setText(d);
+
+        String t = "";
+        if(taskClass.getTime()[0]<10){
+            t += "0"+taskClass.getTime()[0];
+        }else{
+            t += taskClass.getTime()[0];
+        }
+        t += ":";
+        if(taskClass.getTime()[1]<10){
+            t += "0"+taskClass.getTime()[1];
+        }else{
+            t += taskClass.getTime()[1];
+        }
+        t += ":";
+        if(taskClass.getTime()[2]<10){
+            t += "0"+taskClass.getTime()[2];
+        }else{
+            t += taskClass.getTime()[2];
+        }
+        editText_time.setText(t);
 //
         button_Save.setOnClickListener(new View.OnClickListener() {
             @Override
